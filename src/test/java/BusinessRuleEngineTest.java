@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class BusinessRuleEngineTest {
     @Test
@@ -18,5 +19,16 @@ public class BusinessRuleEngineTest {
         businessRuleEngine.addRule(() -> {});
 
         assertEquals(2, businessRuleEngine.count());
+    }
+
+    @Test
+    public void shouldExecuteOneAction() {
+        final BusinessRuleEngine businessRuleEngine = new BusinessRuleEngine();
+        final Action mockAction = mock(Action.class);
+
+        businessRuleEngine.addRule(mockAction);
+        businessRuleEngine.run();
+
+        verify(mockAction).execute();
     }
 }
