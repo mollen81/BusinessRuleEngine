@@ -12,23 +12,34 @@ public class BusinessRuleEngineTest {
     }
 
     @Test
-    public void shouldAddTwoActions() {
-        final BusinessRuleEngine businessRuleEngine = new BusinessRuleEngine();
+    public void shouldAddAction() {
+        final Facts facts = new Facts();
+        final BusinessRuleEngine businessRuleEngine = new BusinessRuleEngine(facts);
+        final Customer customer = new Customer("Mark", "CEO");
 
-        businessRuleEngine.addRule(() -> {});
-        businessRuleEngine.addRule(() -> {});
+        businessRuleEngine.addAction(new Action() {
+            @Override
+            public void execute(Facts facts) {
+                if("CEO".equals(customer.getJobTitle())) {
+                    //some mail logic
+                }
+            }
+        });
 
-        assertEquals(2, businessRuleEngine.count());
+
+        assertEquals(1, businessRuleEngine.count());
     }
 
     @Test
-    public void shouldExecuteOneAction() {
-        final BusinessRuleEngine businessRuleEngine = new BusinessRuleEngine();
+    public void shouldExecuteActionWithFacts() {
         final Action mockAction = mock(Action.class);
+        final Facts mockFacts = mock(Facts.class);
+        final BusinessRuleEngine businessRuleEngine = new BusinessRuleEngine();
 
-        businessRuleEngine.addRule(mockAction);
+        businessRuleEngine.addAction(mockAction);
         businessRuleEngine.run();
 
-        verify(mockAction).execute();
+        verify(mockAction).execute(mockFacts);
     }
+
 }

@@ -5,18 +5,20 @@ public class BusinessRuleEngine {
 
    private final List<Action> actions;
 
+   private final Facts facts;
 
-   public BusinessRuleEngine() {
+
+   public BusinessRuleEngine(final Facts facts) {
        this.actions = new ArrayList<>();
+       this.facts = facts;
    }
 
-
-    public void addRule(Action action) {
+    public void addAction(Action action) {
         this.actions.add(action);
     }
 
     public void run() {
-        this.actions.forEach(Action::execute);
+        this.actions.forEach(action -> action.execute(facts));
     }
 
     public int count() {
